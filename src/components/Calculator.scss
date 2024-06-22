@@ -1,0 +1,54 @@
+@import "../styles/variables";
+
+.calculator {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: $primary-color;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: $font-stack;
+
+  &__display {
+    background: $secondary-color;
+    padding: 20px;
+    font-size: 2em;
+    text-align: right;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  &__buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+
+    button {
+      padding: 20px;
+      font-size: 1.5em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: darken($primary-color, 10%);
+      color: $secondary-color;
+
+      &:hover {
+        background: darken($primary-color, 15%);
+      }
+
+      &:nth-child(1) {
+        grid-column: span 2;
+      }
+
+      &#equals {
+        grid-column: span 2;
+        background: $secondary-color;
+        color: $primary-color;
+      }
+
+      &#zero {
+        grid-column: span 2;
+      }
+    }
+  }
+}
