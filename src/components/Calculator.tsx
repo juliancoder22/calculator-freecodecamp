@@ -16,7 +16,9 @@ const Calculator = () => {
 
     if (value === "=") {
       try {
-        const result = eval(input);
+        const matchedInput = input.match(/(\*|\+|\/|-)?(\.|\-)?\d+/g);
+        const filteredInput = matchedInput ? matchedInput.join("") : "0";
+        const result = eval(filteredInput);
         setOutput(result.toString());
         setInput(result.toString());
         setIsResult(true);
@@ -26,11 +28,15 @@ const Calculator = () => {
       return;
     }
 
-    if (isResult && !isNaN(value)) {
-      setInput(value);
-      setOutput(value);
-      setIsResult(false);
-      return;
+    if (isResult) {
+      if (!isNaN(value) || value === ".") {
+        setInput(value);
+        setOutput(value);
+        setIsResult(false);
+        return;
+      } else {
+        setIsResult(false);
+      }
     }
 
     if (input === "0" && value === "0") return;
@@ -41,7 +47,35 @@ const Calculator = () => {
       return;
     }
 
-    if (value === "." && input.includes(".")) return;
+    if (
+      value === "." &&
+      input
+        .split(/[-+*/]/)
+        .slice(-1)[0]
+        .includes(".")
+    )
+      return;
+
+    if (
+      ["+", "-", "*", "/"].includes(value) &&
+      ["+", "-", "*", "/"].includes(input.slice(-1))
+    ) {
+      let newInput = input;
+      if (value === "-") {
+        newInput += value;
+      } else {
+        while (
+          ["+", "-", "*", "/"].includes(newInput.slice(-1)) &&
+          newInput.slice(-1) !== "-"
+        ) {
+          newInput = newInput.slice(0, -1);
+        }
+        newInput += value;
+      }
+      setInput(newInput);
+      setOutput(newInput);
+      return;
+    }
 
     setInput((prev) => prev + value);
     setOutput((prev) => prev + value);
